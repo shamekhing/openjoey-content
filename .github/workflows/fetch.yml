@@ -1,0 +1,48 @@
+name: fetch-content
+
+# Regenerates the fetchable/generated content and publishes it as release
+# assets. Nothing oversized is ever committed: cards.json (28MB), the card
+# images (2.3GB) and the generated PNGs live outside git by design.
+#
+# Consumers: run the scripts locally, or download the `content-latest` release.
+# Card images are NOT release assets (GitHub caps assets at 2GB); the app
+# downloads them on demand at runtime via CardImageCache.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 1 * *" # monthly, 06:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pillow (make_assets dependency)
+        run: python -m pip install --quiet pillow
+
+      - name: Generate card back + menu background
+        run: python3 scripts/make_assets.py
+
+      - name: Fetch card database
+        run: python3 scripts/fetch_cards.py
+
+      - name: Publish content-latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete content-latest --yes --cleanup-tag || true
+          gh release create content-latest \
+            data/cards.json \
+            data/card_back.png \
+            data/assets/backgrounds/menu_background.png \
+            --title "OpenJoey content (auto-fetched)" \
+            --notes "cards.json + generated assets from $(date -u +%Y-%m-%d). Card images: fetch via scripts/fetch_cards.py --images or let the app download on demand."
