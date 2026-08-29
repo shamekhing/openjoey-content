@@ -1,0 +1,22 @@
+{
+    "file":{
+        "cardsJson": "data/cards.json",
+        "banlistJson": "data/banlist.json",
+        "cardBackImg": "data/card_back.png"
+    },
+    "dir":{
+        "cardImgDir": "data/card_images/",
+    },
+    "url":{
+        "cardsJsonUrl": "https://db.ygoprodeck.com/api/v7/cardinfo.php",
+        "cardImgSmallUrl": "https://images.ygoprodeck.com/images/cards_small/",
+        "cardImgUrl": "https://images.ygoprodeck.com/images/cards/"
+    },
+    "app": {
+        "screenWidth": 1620,
+        "screenHeight": 920,
+        "fullscreen": false,
+        "targetFps": 60,
+        "downloadImages": true
+    }
+}

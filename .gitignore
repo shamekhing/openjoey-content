@@ -1,0 +1,4 @@
+# runtime-generated user settings (persisted by SettingsScreen)
+data/user_settings.json
+# card images are regenerable (scripts/fetch_cards.py); kept out of VCS like the monorepo did
+data/images/
