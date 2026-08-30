@@ -1,0 +1,64 @@
+# effects_lab — hotseat test deck exercising every wired classic effect.
+# One cardId per line (<=3 copies); Fusion monsters are routed to the Extra
+# Deck automatically by the duel-start split (Card::isExtraDeckMonster).
+# Covers: Move_Draw (Pot/Charity), Move_DestroyToGY (Raigeki/Dark Hole/Fissure/
+# MST/Heavy Storm/Trap Hole/Mirror Force), Move_Banish (Nobleman), LP_Gain
+# (Dian Keto), LP_Damage (Ookazi/Just Desserts), NegateActivation + Cost
+# (Solemn Judgment), Flip triggers (Man-Eater Bug, Hane-Hane), Move_ReturnHand
+# (Giant Trunade), Summon_Special (Premature Burial, Cyber-Stein), Fusion
+# (Polymerization + Flame Swordsman), Ritual (Black Illusion Ritual + Black
+# Luster Soldier), tribute ladder 0/1/2 (Gemini Elf / Summoned Skull /
+# Dark Magician / Blue-Eyes) and DEF walls (Mystical Elf).
+55144522
+55144522
+55144522
+79571449
+79571449
+79571449
+12580477
+53129443
+66788016
+66788016
+5318639
+5318639
+19613556
+71044499
+71044499
+84257640
+84257640
+19523799
+19523799
+24068492
+24068492
+41420027
+41420027
+54652250
+54652250
+54652250
+7089711
+7089711
+42703248
+70828912
+70828912
+24094653
+41426869
+5405694
+69015963
+69140098
+69140098
+69140098
+70781052
+70781052
+46986414
+46986414
+89631139
+89631139
+15025844
+15025844
+28279543
+28279543
+44287299
+44287299
+45231177
+4206964
+44095762
