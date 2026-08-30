@@ -6,7 +6,7 @@ gitignored and produced by the pipeline below.
 
 | Path | In git? | Producer / purpose |
 |---|---|---|
-| `data/settings.json` | yes | human-readable reference of shipped defaults (see `docs/DATA.md` — the app's compiled-in defaults are authoritative) |
+| `data/settings.json` | yes | shipped defaults, consumed by `openjoey::Settings::Load` (see `docs/DATA.md` — compiled-in defaults remain the fallback) |
 | `data/decks/` | yes | hand-maintained decks (`default.txt` = 40-card classic starter) |
 | `data/card_back2.png` | yes | spare/alternative card back — **not yet referenced by any code or script** |
 | `docs/SD_RuleBook_EN_10.pdf` | yes | reference (the rules this engine implements) |

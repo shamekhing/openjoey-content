@@ -47,21 +47,24 @@ Per-entry fields consumed: `id`, `name`, `desc`, `frameType`
 
 Two distinct files, different schemas:
 
-* **`data/settings.json`** (in git) — human-readable reference of intended
-  shipped defaults, grouped as `file` / `dir` / `url` / `app`.
-  **Caveat:** the app's `openjoey::Settings::Load` (openjoey-core) currently
-  parses a *flat* schema (`screenWidth`, `paths.cardsJson`, …) and does not
-  read this file's nested groups; the compiled-in defaults in `Settings`
-  are what actually ships. Aligning the two is a planned v0.2 item.
+* **`data/settings.json`** (in git) — shipped-defaults reference, grouped as
+  `file` / `dir` / `url` / `app`. `openjoey::Settings::Load` (openjoey-core)
+  applies it first: `file` / `dir` map onto the `Settings::Paths` path fields,
+  `url` onto the URL fields (`cardsJsonUrl`, `cardImgUrl`, `cardImgSmallUrl`),
+  `app` onto the window/download options. Path values are content-root
+  relative (`data/cards.json`) and are resolved onto the effective data dir
+  at load time; the compiled-in defaults in `Settings` are the fallback when
+  the file (or a key) is absent.
 * **`data/user_settings.json`** (gitignored, app-written) — what
-  `Settings::Save()` produces and `Settings::Load()` consumes: flat keys
-  `screenWidth`, `screenHeight`, `fullscreen`, `targetFps`,
-  `downloadImages`, plus a `paths` object. Partial files are fine — every
-  missing key falls back to its default.
+  `Settings::Save()` produces and `Settings::Load()` applies last (it wins
+  over `settings.json`). Same nested schema; partial files are fine — every
+  missing key falls back to its earlier layer. The pre-0.2 flat layout
+  (top-level `screenWidth`, …, plus a `paths` object with the old
+  `ygoprodeckUrl` key names) is still accepted for older files.
 
-`Settings::settingsFile(argv0)` resolution order: `<exeDir>/data/` wins when
-the file exists there, else `<cwd>/data/`, else `<exeDir>/data/` as the
-creation target.
+Both files resolve in the same data dir (`Settings::settingsFile(argv0)` /
+`referenceFile(argv0)`): `<exeDir>/data/` wins when the file exists there,
+else `<cwd>/data/`, else `<exeDir>/data/` as the creation target.
 
 ## 5. Decks — `decks/*.txt`
 
@@ -69,8 +72,13 @@ creation target.
 * `#` starts a comment line; blank lines ignored.
 * ≤ 3 copies per card id (classic-format limiter; UI enforces it via the
   copy counter).
-* `default.txt` is the 40-card classic-era starter loaded by
-  `DeckEditorScreen::LoadDeck("default")`.
+* `default.txt` is the 40-card classic-era starter: the duel loads it whenever
+  it starts outside the deck editor (`DuelScreen::buildDecks` via
+  `loadDefaultDeck()`), and the editor loads it with `[L]`
+  (`DeckEditorScreen::LoadDeck("default")`). It contains every wired
+  classic-effect card from `duel/ClassicCatalog.hpp` +
+  `field/ClassicEffects.hpp` (plus their Fusion/Ritual targets and classic
+  normal staples as the tribute ladder).
 
 ## 6. Fetch pipeline
 

@@ -1,42 +1,60 @@
-# OpenJoey starter deck — YGO Classic era staples (one cardId per line,
-# <=3 copies; loaded by DeckEditorScreen::LoadDeck("default")).
-89631139
-89631139
-89631139
-46986414
-46986414
-70781052
-70781052
-14898066
-14898066
-97590747
-97590747
-5053103
-5053103
-6368038
-28279543
-28279543
-15025844
-15025844
-90357090
-91152256
+# OpenJoey starter deck — every wired classic effect in one 40-card deck
+# (one cardId per line, <=3 copies; loaded by DeckEditorScreen::LoadDeck("default")).
+# Built from the classicEffects catalogs (duel/ClassicCatalog.hpp +
+# field/ClassicEffects.hpp): Move_Draw (Pot of Greed, Graceful Charity, Jar of
+# Greed), Move_DestroyToGY (Raigeki, Dark Hole, Fissure, Mystical Space Typhoon,
+# Heavy Storm, Trap Hole, Mirror Force), Move_Banish (Nobleman of Crossout),
+# Move_ReturnHand (Giant Trunade), LP_Gain (Dian Keto), LP_Damage (Ookazi,
+# Just Desserts, Man-Eater Bug), NegateActivation (Solemn Judgment), Cost
+# (Delinquent Duo), Summon_Special (Monster Reborn, Premature Burial,
+# Cyber-Stein), Summon_Fusion (Polymerization + Flame Swordsman -> Extra Deck),
+# Summon_Ritual (Black Illusion Ritual + Black Luster Soldier), FLIP triggers
+# (Man-Eater Bug, Hane-Hane). Classic normals fill the tribute ladder.
+# ── Draw / search ──
 55144522
-53129443
+55144522
+79571449
+83968380
+# ── Mass / targeted destruction ──
 12580477
-83764719
-72302403
-4031928
+53129443
 66788016
-66788016
-72892473
-19159413
+5318639
+19613556
+71044499
+42703248
+4206964
+44095762
+# ── LP swings ──
 84257640
-51482758
-4206964
-4206964
-12607053
-12607053
+19523799
 24068492
-17814387
-63102017
-40374923
+44763025
+# ── Negate / protect ──
+41420027
+# ── Revive / summon from GY / Extra ──
+83764719
+70828912
+69015963
+# ── Fusion + Ritual packages ──
+24094653
+24094653
+45231177
+41426869
+5405694
+# ── Flip-trigger monsters ──
+54652250
+54652250
+7089711
+7089711
+# ── Tribute ladder (classic normal staples) ──
+89631139
+89631139
+89631139
+46986414
+70781052
+70781052
+69140098
+97590747
+15025844
+91152256

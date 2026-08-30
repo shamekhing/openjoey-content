@@ -1,13 +1,13 @@
 {
-    "file":{
+    "file": {
         "cardsJson": "data/cards.json",
         "banlistJson": "data/banlist.json",
         "cardBackImg": "data/card_back.png"
     },
-    "dir":{
-        "cardImgDir": "data/card_images/",
+    "dir": {
+        "cardImgDir": "data/images/"
     },
-    "url":{
+    "url": {
         "cardsJsonUrl": "https://db.ygoprodeck.com/api/v7/cardinfo.php",
         "cardImgSmallUrl": "https://images.ygoprodeck.com/images/cards_small/",
         "cardImgUrl": "https://images.ygoprodeck.com/images/cards/"
