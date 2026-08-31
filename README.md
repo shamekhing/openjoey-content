@@ -9,7 +9,7 @@ gitignored and produced by the pipeline below.
 | `data/settings.json` | yes | shipped defaults, consumed by `openjoey::Settings::Load` (see `docs/DATA.md` — compiled-in defaults remain the fallback) |
 | `data/decks/` | yes | hand-maintained decks (`default.txt` = 40-card classic starter) |
 | `data/card_back2.png` | yes | spare/alternative card back — **not yet referenced by any code or script** |
-| `docs/SD_RuleBook_EN_10.pdf` | yes | reference (the rules this engine implements) |
+| `docs/SD_RuleBook_EN_10.pdf` | **no** — untracked third-party content, local copy only | reference (the rules this engine implements) |
 | `scripts/fetch_cards.py` | yes | downloads `cards.json` (`--images` to bulk-fetch art) |
 | `scripts/make_assets.py` | yes | generates `card_back.png` + menu background |
 | `data/cards.json` (28 MB) | **no** | `fetch_cards.py` / CI pipeline |
