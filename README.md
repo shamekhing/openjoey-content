@@ -42,3 +42,9 @@ notably the `<cardId>.jpg` image-naming contract that `Card::imageId`
 
 Extracted from OpenJoey2@21f1d8e. Consumed by: openjoey-app (build-time
 symlink), openjoey-cards (image-cache URL/naming contract).
+
+## License
+
+Licensed under the PolyForm Noncommercial License 1.0.0 — see
+[`LICENSE`](LICENSE). Free for noncommercial use; commercial use requires a
+paid license from the copyright holder (shamekhing@gmail.com).
