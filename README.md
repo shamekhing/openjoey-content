@@ -37,7 +37,7 @@ runtime paths stay unchanged: `<builddir>/data/...`.
 ## Data contract
 
 Formats and naming rules are specified in [`docs/DATA.md`](docs/DATA.md) —
-notably the `<ygoproId>.jpg` image-naming contract that `Card::imageId`
+notably the `<cardId>.jpg` image-naming contract that `Card::imageId`
 (openjoey-cards) depends on.
 
 Extracted from OpenJoey2@21f1d8e. Consumed by: openjoey-app (build-time

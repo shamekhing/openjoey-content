@@ -23,23 +23,25 @@ binary, so `<exe>/data/...` is the single runtime root.
 
 ## 2. `cards.json` — card database
 
-YGOProDeck API v7 payload (`https://db.ygoprodeck.com/api/v7/cardinfo.php`
-shape): `{"data": [ entry, ... ]}`. Parsed by
-`openjoey::cards::parseYgoProDeckJson` — see `openjoey-cards/docs/API.md`
+Remote card-data provider API v7 payload shape:
+`{"data": [ entry, ... ]}`. Parsed by
+`openjoey::cards::parseRemoteCardJson` — see `openjoey-cards/docs/API.md`
 for the full parse contract (dedup by id, `"?"/string stats → 0`, Xyz `rank`
 → `level`, `imageId == cardId`, errors collected non-fatally).
 
 Per-entry fields consumed: `id`, `name`, `desc`, `frameType`
 (`spell`/`skill`/`trap`/everything-else→monster), `atk`, `def`, `level`,
-`rank`.
+`rank`. Provider metadata is stripped at fetch time — the file carries
+only what the game consumes.
 
-## 3. Card images — the `<ygoproId>.jpg` contract
+## 3. Card images — the `<cardId>.jpg` contract
 
 * `data/images/<cardId>.jpg` — full art; `data/images/<cardId>` must equal
   `Card::cardId` from `cards.json`. `CardImageCache` (openjoey-cards) and
   `fetch_cards.py` both use this naming.
-* URLs: `https://images.ygoprodeck.com/images/cards/<id>.jpg` with
-  `.../cards_small/<id>.jpg` as fallback.
+* URLs: the provider image endpoints are deployment configuration —
+  `data/settings.json`, `url` group (`cardImgUrl` full art,
+  `cardImgSmallUrl` fallback). Ship your own values for a rebrand.
 * Missing files are fetched on demand at runtime (one background worker,
   curl-based) — bulk prefetch is optional (`fetch_cards.py --images --jobs N`).
 
@@ -59,8 +61,8 @@ Two distinct files, different schemas:
   `Settings::Save()` produces and `Settings::Load()` applies last (it wins
   over `settings.json`). Same nested schema; partial files are fine — every
   missing key falls back to its earlier layer. The pre-0.2 flat layout
-  (top-level `screenWidth`, …, plus a `paths` object with the old
-  `ygoprodeckUrl` key names) is still accepted for older files.
+  (top-level `screenWidth`, …, plus a `paths` object with the pre-0.2
+  endpoint-key names) is still accepted for older files.
 
 Both files resolve in the same data dir (`Settings::settingsFile(argv0)` /
 `referenceFile(argv0)`): `<exeDir>/data/` wins when the file exists there,
@@ -82,8 +84,9 @@ else `<cwd>/data/`, else `<exeDir>/data/` as the creation target.
 
 ## 6. Fetch pipeline
 
-* `scripts/fetch_cards.py` — regenerates `cards.json` from the YGOProDeck
-  API; flags: `--images` (bulk art), `--jobs N` (threads, default 8),
+* `scripts/fetch_cards.py` — regenerates `cards.json` from the remote
+  card-data API (endpoints read from `data/settings.json`, `url` group);
+  flags: `--images` (bulk art), `--jobs N` (threads, default 8),
   `--no-card-back`.
 * `scripts/make_assets.py` — generates `data/card_back.png` and
   `assets/backgrounds/menu_background.png` (pillow).

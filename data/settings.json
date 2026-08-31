@@ -9,6 +9,7 @@
     },
     "url": {
         "cardsJsonUrl": "https://db.ygoprodeck.com/api/v7/cardinfo.php",
+        "banlistUrl": "https://db.ygoprodeck.com/api/v7/forbiddenLimitedList.php",
         "cardImgSmallUrl": "https://images.ygoprodeck.com/images/cards_small/",
         "cardImgUrl": "https://images.ygoprodeck.com/images/cards/"
     },

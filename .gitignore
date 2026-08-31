@@ -10,3 +10,7 @@ data/card_back.png
 data/assets/backgrounds/menu_background.png
 # stray temp files from CardImageCache downloads
 *.tmp
+
+# Third-party rulebook PDF: local reference only, never distributed
+*.pdf
+__pycache__/

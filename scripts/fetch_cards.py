@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Download the Yu-Gi-Oh! card database + images for OpenJoey2.
+"""Download the card database + images for OpenJoey2.
 
 This is the canonical asset-fetch tool. It is intentionally more robust than a
 naive "curl every id" loop:
 
-  * It queries the YGOProDeck ``cardinfo.php?name=`` endpoint with a real
+  * It queries the card-data endpoint from the ``data/settings.json```
+  ``url`` group with a real
     browser User-Agent (so we don't get 403'd), then reads back the
     authoritative ``image_url`` / ``image_url_small`` from the response. The
     filename stem always matches what the C++ engine expects:
 
-        openjoey::Card::imageId  (== cardId == YGOProDeck ``id``)
+        openjoey::Card::imageId  (== cardId == provider ``id``)
 
     and the on-disk path is ``data/images/<imageId>.jpg`` -- exactly where
     ``CardImageCache`` looks (via ``ContentPaths::cardImgDir()``).
@@ -52,8 +53,11 @@ import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
-API = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
-BANLIST_API = "https://db.ygoprodeck.com/api/v7/forbiddenLimitedList.php"
+def _urls():
+    cfg = json.loads((DATA / "settings.json").read_text()).get("url", {})
+    return cfg["cardsJsonUrl"], cfg["banlistUrl"], cfg["cardImgUrl"]
+
+API, BANLIST_API, IMG_URL_BASE = _urls()  # endpoints live in data/settings.json
 IMG_DIR = DATA / "images"           # MUST match ContentPaths::cardImgDir()
 CARD_BACK = DATA / "card_back.png"  # MUST match ContentPaths::cardBackImg()
 
@@ -87,7 +91,7 @@ def get(url, attempts=3):
 
 
 def fetch_image_url(card_name):
-    """Ask YGOProDeck for a card by name; return its image URL (or None)."""
+    """Ask the card-data service for a card by name; return its image URL (or None)."""
     params = urllib.parse.urlencode({"name": card_name})
     try:
         data = json.loads(get(API + "?" + params).decode())
@@ -101,7 +105,7 @@ def fetch_image_url(card_name):
 
 
 def id_from_url(url):
-    """Pull the numeric card id out of a YGOProDeck image URL."""
+    """Pull the numeric card id out of a provider image URL."""
     try:
         stem = pathlib.Path(urllib.parse.urlparse(url).path).stem
         return int(stem)
@@ -118,7 +122,7 @@ def download_bytes(url, dest):
     except Exception as e:
         print("  download error for %s: %s" % (url, e))
         return False
-    if len(data) < 1024:  # YGOProDeck serves a ~1KB placeholder on misses
+    if len(data) < 1024:  # the provider serves a ~1KB placeholder on misses
         return False
     tmp.write_bytes(data)
     tmp.replace(dest)
@@ -192,6 +196,13 @@ def write_cards():
     obj = json.loads(text)
     if isinstance(obj, list):
         obj = {"data": obj}
+    # Keep only the fields the parser contract consumes (see
+    # openjoey-cards/docs/API.md): everything else — provider URLs, set
+    # listings, prices — is dropped so the shipped data stays minimal.
+    KEEP = ("id", "name", "desc", "frameType", "atk", "def", "level", "rank")
+    obj["data"] = [
+        {k: entry[k] for k in KEEP if k in entry} for entry in obj.get("data", [])
+    ]
     cards_path = DATA / "cards.json"
     cards_path.write_text(json.dumps(obj, ensure_ascii=False, indent=2))
     print("wrote %s (%d cards)" % (cards_path, len(obj["data"])))
@@ -217,7 +228,7 @@ def download_card_back(do_download):
         return
     print("card_back.png  fetch ...", end=" ", flush=True)
     try:
-        data = get("https://images.ygoprodeck.com/images/cards/back.jpg")
+        data = get(IMG_URL_BASE + "back.jpg")
         if len(data) < 1024:
             print("placeholder"); return
         try:
@@ -232,7 +243,7 @@ def download_card_back(do_download):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Download Yu-Gi-Oh! DB + images for OpenJoey2")
+    ap = argparse.ArgumentParser(description="Download the card DB + images for OpenJoey2")
     ap.add_argument("--images", action="store_true", help="also download card images")
     ap.add_argument("--jobs", type=int, default=8, help="image download threads")
     ap.add_argument("--no-card-back", action="store_true", help="skip fetching the card back")

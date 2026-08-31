@@ -23,7 +23,7 @@ CARD_BACK_GOLD = (210, 170, 40)
 
 
 def card_back(size=(348, 494)):
-    """A stylized Yu-Gi-Oh-style card back (348x494 ≈ 59:86 aspect)."""
+    """A stylized card back (348x494 ≈ 59:86 aspect)."""
     img = Image.new("RGB", size, CARD_BACK_OUTER)
     d = ImageDraw.Draw(img)
 
